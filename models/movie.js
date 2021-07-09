@@ -28,7 +28,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validateImage.test(v),
-      message: 'Недопустимое значение поля avatar',
+      message: 'Недопустимое значение поля image',
     },
   },
   trailer: {
@@ -36,7 +36,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validateImage.test(v),
-      message: 'Недопустимое значение поля avatar',
+      message: 'Недопустимое значение поля trailer',
     },
   },
   thumbnail: {
@@ -44,7 +44,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => validateImage.test(v),
-      message: 'Недопустимое значение поля avatar',
+      message: 'Недопустимое значение поля thumbnail',
     },
   },
   owner: {
@@ -54,6 +54,7 @@ const movieSchema = new mongoose.Schema({
   movieId: {
     type: String,
     required: true,
+    unique: true,
   },
   nameRU: {
     type: String,

@@ -9,8 +9,12 @@ function getCards(req, res, next) {
 }
 
 const createCard = (req, res, next) => {
-  const { country, director, duration, year, description, image, trailer, thumbnail, owner, nameRU, nameEN, movieId } = req.body;
-  Card.create({ country, director, duration, year, description, image, trailer, thumbnail, owner: req.user._id, nameRU, nameEN, movieId })
+  const {
+    country, director, duration, year, description, image, trailer, thumbnail, nameRU, nameEN, movieId,
+  } = req.body;
+  Card.create({
+    country, director, duration, year, description, image, trailer, thumbnail, owner: req.user._id, nameRU, nameEN, movieId,
+  })
     .then((card) => res.status(200).send({ data: card }))
     .catch((e) => {
       if (e.name === 'ValidationError') {
@@ -19,7 +23,7 @@ const createCard = (req, res, next) => {
         next(err);
       }
     });
-}
+};
 
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.movieId)
