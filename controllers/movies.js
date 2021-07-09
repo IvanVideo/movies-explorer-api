@@ -1,18 +1,16 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const Movie = require('../models/movie');
+const Card = require('../models/movie');
+const NotFoundError = require('../errors/not-found-err');
+const NoRightsError = require('../errors/no-register-error');
 
-const SALT_ROUNDS = 10;
-
-const getMovies = (req, res, next) => {
+function getCards(req, res, next) {
   return Card.find({})
     .then((cards) => res.status(200).send(cards))
     .catch(next);
 }
 
-const createMovie = (req, res, next) => {
-  const { country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId } = req.body;
-  Card.create({ name, link, owner: req.user._id })
+const createCard = (req, res, next) => {
+  const { country, director, duration, year, description, image, trailer, thumbnail, owner, nameRU, nameEN, movieId } = req.body;
+  Card.create({ country, director, duration, year, description, image, trailer, thumbnail, owner: req.user._id, nameRU, nameEN, movieId })
     .then((card) => res.status(200).send({ data: card }))
     .catch((e) => {
       if (e.name === 'ValidationError') {
@@ -23,8 +21,8 @@ const createMovie = (req, res, next) => {
     });
 }
 
-const deleteMovie = (req, res, next) => {
-  Card.findById(req.params.cardId)
+const deleteCard = (req, res, next) => {
+  Card.findById(req.params.movieId)
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Карточка не найдена');
@@ -38,10 +36,10 @@ const deleteMovie = (req, res, next) => {
         });
     })
     .catch(next);
-}
+};
 
 module.exports = {
-  getMovies,
-  createMovie,
-  deleteMovie
+  getCards,
+  createCard,
+  deleteCard,
 };

@@ -26,7 +26,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
+mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

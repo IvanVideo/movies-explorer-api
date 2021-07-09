@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const NotFoundError = require('../errors/not-found-err');
 
 const SALT_ROUNDS = 10;
 
@@ -21,7 +22,7 @@ const getUserInfo = (req, res, next) => {
       }
       next(e);
     });
-}
+};
 
 const updateUserInfo = (req, res, next) => {
   const { email, name } = req.body;
@@ -47,7 +48,7 @@ const updateUserInfo = (req, res, next) => {
       }
       next(e);
     });
-}
+};
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -76,11 +77,11 @@ const login = (req, res, next) => {
         });
     })
     .catch(next);
-}
+};
 
 const createUser = (req, res, next) => {
   const {
-    password, name
+    email, password, name,
   } = req.body;
   User.findOne({ email })
     .then((user) => {
@@ -91,15 +92,13 @@ const createUser = (req, res, next) => {
       } return bcrypt.hash(password, SALT_ROUNDS);
     })
     .then((hash) => User.create({
-      name,
-      about,
-      avatar,
       email,
       password: hash,
+      name,
     }))
     .then(() => res.status(200).send({
       data: {
-        name, about, avatar, email,
+        name, email,
       },
     }))
     .catch((e) => {
@@ -110,11 +109,11 @@ const createUser = (req, res, next) => {
       }
       next(e);
     });
-}
+};
 
 module.exports = {
   getUserInfo,
   updateUserInfo,
   login,
-  createUser
+  createUser,
 };
