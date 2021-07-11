@@ -26,7 +26,7 @@ const createCard = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  Card.findById(req.params.movieId)
+  Card.findById(req.params._id)
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Карточка не найдена');

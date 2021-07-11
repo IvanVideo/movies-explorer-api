@@ -33,6 +33,7 @@ const updateUserInfo = (req, res, next) => {
       runValidators: true,
       new: true,
     },
+    console.log(req.user._id, '0101001'),
   )
     .then((user) => {
       if (!user) {

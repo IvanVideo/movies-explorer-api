@@ -22,9 +22,9 @@ router.post('/', auth, celebrate({
     movieId: Joi.string().min(2).max(30).required(),
   }),
 }), createCard);
-router.delete('/:movieId', celebrate({
+router.delete('/:_id', celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().length(24).hex().required(),
+    _id: Joi.string().length(24).hex().required(),
   }),
 }), auth, deleteCard);
 
