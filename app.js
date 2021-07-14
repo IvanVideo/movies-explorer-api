@@ -7,6 +7,9 @@ const cors = require('cors');
 const helmet = require('helmet');
 const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const {
+  mongoesUrl,
+} = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -34,7 +37,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(mongoesUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

@@ -5,6 +5,7 @@ const auth = require('../middlewares/auth');
 const { getCards } = require('../controllers/movies');
 const { createCard } = require('../controllers/movies');
 const { deleteCard } = require('../controllers/movies');
+const { link } = require('../utils/constants');
 
 router.get('/', auth, getCards);
 router.post('/', auth, celebrate({
@@ -14,9 +15,9 @@ router.post('/', auth, celebrate({
     duration: Joi.number(),
     year: Joi.string().min(2).max(30).required(),
     description: Joi.string().min(2).max(30).required(),
-    image: Joi.string().pattern(/^(http|https):\/\/[-a-zA-Z0-9@:%_+.~#?&/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_+.~#?&/=]*)?/).required(),
-    trailer: Joi.string().pattern(/^(http|https):\/\/[-a-zA-Z0-9@:%_+.~#?&/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_+.~#?&/=]*)?/).required(),
-    thumbnail: Joi.string().pattern(/^(http|https):\/\/[-a-zA-Z0-9@:%_+.~#?&/=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_+.~#?&/=]*)?/).required(),
+    image: Joi.string().pattern(link).required(),
+    trailer: Joi.string().pattern(link).required(),
+    thumbnail: Joi.string().pattern(link).required(),
     nameRU: Joi.string().min(2).max(30).required(),
     nameEN: Joi.string().min(2).max(30).required(),
     movieId: Joi.number(),

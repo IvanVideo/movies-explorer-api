@@ -2,10 +2,15 @@ const Card = require('../models/movie');
 const NotFoundError = require('../errors/not-found-err');
 const NoRightsError = require('../errors/no-register-error');
 const IncorrectData = require('../errors/incorrect-data-error');
+const {
+  invalid,
+  noCard,
+  noDelCard,
+} = require('../utils/constants');
 
 function getCards(req, res, next) {
   return Card.find({})
-    .then((cards) => res.status(200).send(cards))
+    .then((cards) => res.send(cards))
     .catch(next);
 }
 
@@ -37,10 +42,10 @@ const createCard = (req, res, next) => {
     nameEN,
     movieId,
   })
-    .then((card) => res.status(200).send({ data: card }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new IncorrectData('Переданы некорректные данные');
+        throw new IncorrectData(invalid);
       }
       throw err;
     })
@@ -51,14 +56,14 @@ const deleteCard = (req, res, next) => {
   Card.findById(req.params._id)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Карточка не найдена');
+        throw new NotFoundError(noCard);
       }
       if (String(card.owner) !== String(req.user._id)) {
-        throw new NoRightsError('Вы не можете удалять чужие карточки');
+        throw new NoRightsError(noDelCard);
       }
-      return Card.deleteOne({ _id: card._id })
+      return Card.remove()
         .then(() => {
-          res.status(200).send({ message: 'Карточка удалена' });
+          res.send({ message: 'Карточка удалена' });
         });
     })
     .catch(next);
