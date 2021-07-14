@@ -5,11 +5,11 @@ const auth = require('../middlewares/auth');
 const { getUserInfo } = require('../controllers/users');
 const { updateUserInfo } = require('../controllers/users');
 
-router.get('/me', celebrate({
+router.get('/me', auth, celebrate({
   body: Joi.object().keys({
     _id: Joi.string().required(),
   }),
-}), auth, getUserInfo);
+}), getUserInfo);
 router.patch('/me', auth, celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),

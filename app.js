@@ -1,13 +1,20 @@
+const rateLimit = require('express-rate-limit');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
+const helmet = require('helmet');
 const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
 
 const whitelist = [
   'http://localhost:3000',
@@ -33,6 +40,9 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
   useCreateIndex: true,
   useFindAndModify: false,
 });
+
+app.use(limiter);
+app.use(helmet());
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -45,7 +55,7 @@ app.get('/crash-test', () => {
 app.use('/', routes);
 app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res, next) => { // eslint-disable-line
+app.use((err, req, res) => {
   const { statusCode = 500, message } = err;
   res.status(statusCode).send({
     message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
